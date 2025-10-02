@@ -15,8 +15,8 @@ comment_leading = "#"
 test = true
 
 [cookies]
-csrf = '<your-leetcode-csrf-token>'
-session = '<your-leetcode-session-key>'
+csrf = ''
+session = ''
 # leetcode.com or leetcode.cn
 site = "leetcode.com"
 
