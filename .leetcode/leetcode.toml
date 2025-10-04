@@ -15,13 +15,12 @@ comment_leading = "#"
 test = true
 
 [cookies]
-csrf = ''
-session = ''
-# leetcode.com or leetcode.cn
+csrf = ""
+session = ""
 site = "leetcode.com"
 
 [storage]
-cache = 'Problems'
-code = 'code'
+cache = 'Problems'`
+code = '/Users/austinm1701/code/Leetcode-Solutions/Code'
 root = '~/.leetcode'
-scripts = 'scripts'
+scripts = 'scripts'`
