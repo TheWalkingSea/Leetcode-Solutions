@@ -32,37 +32,35 @@
 
 class Solution {
     public int trap(int[] height) {
-        int max = -1;
-        for (int i = 0; i<height.length; i++) {
-            if (height[i] > max) {
-                max = height[i];
-            }
-        }
+        int leftp = 0;
+        int rightp = height.length - 1;
 
-        int netWater = 0;
+        int max_left = 0;
+        int max_right = 0;
 
-        for (int level = 1; level <= max; level++) {
-            int i = 0;
-            while (i < height.length) {
-                if (height[i] >= level) {
-                    int water = 0;
-                    i++; // Increment to next space
-                    while (i < height.length && height[i] < level) {
-                        water++;
-                        i++;
-                    }
+        int net_water = 0;
 
-                    if (i >= height.length) {
-                        break; // Ignore water spaces on the right 
-                    }
+        while (rightp >= leftp) {
+            if (max_right > max_left) {
+                // Water is dependent on the left pointer
 
-                    netWater += water;
+
+                if (height[leftp] > max_left) {
+                    max_left = height[leftp];
                 } else {
-                    i++;
+                    net_water += max_left - height[leftp];
                 }
+                leftp++;
+            } else {
+                if (height[rightp] > max_right) {
+                    max_right = height[rightp];
+                } else {
+                    net_water += max_right - height[rightp];
+                }
+                rightp--;
             }
         }
 
-        return netWater;
+        return net_water;
     }
 }
