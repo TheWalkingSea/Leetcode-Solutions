@@ -35,10 +35,95 @@
 // 	board[i][j] is a digit or '.'.
 // 	It is guaranteed that the input board has only one solution.
 // 
- 
+
+import java.util.HashSet;
 
 class Solution {
+
+    public Boolean solveSudoku(
+        int row,
+        int col,
+        char[][] board,
+        HashSet<Character>[] rows,
+        HashSet<Character>[] columns,
+        HashSet<Character>[][] boxes
+    ) {
+        // If out of bounds -> Solved!
+        if (col == 9) {
+            return true;
+        }
+
+        // For the recursive call
+        int recursiveRow = row + 1;
+        int recursiveCol = col;
+        if (recursiveRow > 8) {
+            recursiveRow = 0;
+            recursiveCol++;
+        }
+
+        if (board[row][col] != '.') {
+            // Number placed already -> Go to next cell
+            return solveSudoku(recursiveRow, recursiveCol, board, rows, columns, boxes);
+        }
+
+        for (int newValue = 1; newValue <= 9; newValue++) {
+
+            char cellValue = Integer.toString(newValue).charAt(0);
+
+            if (rows[row].contains(cellValue)
+            || columns[col].contains(cellValue) 
+            || boxes[row / 3][col / 3].contains(cellValue)
+            ) {
+                continue; // Go to the next newValue
+            }
+
+            rows[row].add(cellValue);
+            columns[col].add(cellValue);
+            boxes[row / 3][col / 3].add(cellValue);
+
+            board[row][col] = cellValue;
+
+            // Successfully modified board!
+            if (solveSudoku(recursiveRow, recursiveCol, board, rows, columns, boxes)) {
+                return true;
+            } else {
+                // Unsuccessful, revert actions
+                rows[row].remove(cellValue);
+                columns[col].remove(cellValue);
+                boxes[row / 3][col / 3].remove(cellValue);
+                board[row][col] = '.';
+            }
+        }
+
+        return false;
+    }
     public void solveSudoku(char[][] board) {
-        
+        HashSet<Character>[] rows = (HashSet<Character>[]) new HashSet[9];
+        HashSet<Character>[] columns = (HashSet<Character>[]) new HashSet[9];
+        HashSet<Character>[][] boxes = (HashSet<Character>[][]) new HashSet[3][3];
+        // Initialization
+        for (int i = 0; i < 9; i++) {
+            rows[i] = new HashSet<>();
+            columns[i] = new HashSet<>();
+        }
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                boxes[i][j] = new HashSet<>();
+            }
+        }
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char val = board[i][j];
+                if (val == '.') {
+                    continue;
+                }
+                rows[i].add(val);
+                columns[j].add(val);
+                boxes[i / 3][j / 3].add(val);
+            }
+        }
+        solveSudoku(0, 0, board, rows, columns, boxes);
     }
 }
